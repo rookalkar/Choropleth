@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>D3: Setting path fills</title>
+        <script src="//d3js.org/d3.v3.min.js"></script>
+        <script src="https://d3js.org/d3-queue.v2.min.js"></script>
+        <style type="text/css">
+            /* No style rules here yet */       
+        </style>
+    </head>
+    <body>
+        <script type="text/javascript">
+
+            //Width and height
+            var w = 500;
+            var h = 300;
+            
+            var quantize = d3.scale.quantize()
+                                .domain([0, 16415])
+                                .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+            //Define map projection
+            var projection = d3.geo.mercator()
+                                   .translate([0, 0])
+                                   .scale(1);
+
+            //Define path generator
+            var path = d3.geo.path()
+                             .projection(projection);
+
+            //Create SVG element
+            var svg = d3.select("body")
+                        .append("svg")
+                        .attr("width", w)
+                        .attr("height", h);
+            d3_queue.queue()
+                .defer(d3.json, "newstates.json")
+                .defer(d3.csv, "Workbook3.csv", function(d) { d3.map().set(d.State, +d.GrandTotal); })
+                .await(ready);
+            
+            function ready(error, json){
+                if (error) throw error;
+                
+                var b = path.bounds( json ),
+                s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
+                t = [(w - s * (b[1][0] + b[0][0])) / 2, (h - s * (b[1][1] + b[0][1])) / 2];
+                
+                projection
+                  .scale(s)
+                  .translate(t);
+                
+                svg.selectAll("path")
+                   .data(json.features)
+                   .enter()
+                   .append("path")
+                   .attr("fill", "green")
+                   .attr("d", path);
+                
+                console.log(json.features);
+            }
+            
+            function getDensityColor(d) {
+                var mapBrew = ['rgb(255,255,204)','rgb(217,240,163)','rgb(173,221,142)','rgb(120,198,121)','rgb(65,171,93)','rgb(35,132,67)','rgb(0,90,50)']
+                
+                var colors = Array.prototype.slice.call(mapBrew).reverse(), // creates a copy of the mapBrew array and reverses it
+                     range = [20000,15000,10000,5000,1000,0];
+
+                return  d > range[0] ? colors[0] :
+                        d > range[1] ? colors[1] :
+                        d > range[2] ? colors[2] :
+                        d > range[3] ? colors[3] :
+                        d > range[4] ? colors[4] :
+                        d > range[5] ? colors[5] :
+                        colors[6];
+            }
+
+        </script>
+    </body>
+</html>
