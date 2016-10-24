@@ -15,10 +15,6 @@
             //Width and height
             var w = 500;
             var h = 300;
-            
-            var quantize = d3.scale.quantize()
-                                .domain([0, 16415])
-                                .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
 
             //Define map projection
             var projection = d3.geo.mercator()
