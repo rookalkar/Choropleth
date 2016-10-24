@@ -110,12 +110,12 @@
         console.log(layer);
 
         var popupData = {
-            state: indiaCensus.states[layer.feature.properties.code].name,
-            density: indiaCensus.states[layer.feature.properties.code].density,
-            area: indiaCensus.states[layer.feature.properties.code].area,
-            growth: indiaCensus.states[layer.feature.properties.code].growth,
-            population: indiaCensus.states[layer.feature.properties.code].population,
-            capital: indiaCensus.states[layer.feature.properties.code].capital.name 
+//             state: indiaCensus.states[layer.feature.properties.code].name,
+//             density: indiaCensus.states[layer.feature.properties.code].density,
+//             area: indiaCensus.states[layer.feature.properties.code].area,
+//             growth: indiaCensus.states[layer.feature.properties.code].growth,
+//             population: indiaCensus.states[layer.feature.properties.code].population,
+//             capital: indiaCensus.states[layer.feature.properties.code].capital.name 
         };
 
         popup.setLatLng(e.latlng);
@@ -168,7 +168,7 @@
                 from + (to ? '&ndash;' + to : '+'));
         }
 
-        return '<span>People per square km</span><br>' + labels.join('<br>');
+        return '<span>Farmer Sucides per State </span><br>' + labels.join('<br>');
     }
 
 
