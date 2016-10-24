@@ -32,11 +32,15 @@
                         .attr("height", h);
             d3_queue.queue()
                 .defer(d3.json, "newstates.json")
-                .defer(d3.csv, "Workbook3.csv", function(d) { d3.map().set(d.State, +d.GrandTotal); })
+                .defer(d3.csv, "Workbook3.csv")
                 .await(ready);
             
-            function ready(error, json){
+            function ready(error, json, csv){
                 if (error) throw error;
+                
+                for(var i=0; i< csv.length; i++){
+                    csv[i].GrandTotal = +csv[i].GrandTotal
+                }
                 
                 var b = path.bounds( json ),
                 s = .95 / Math.max((b[1][0] - b[0][0]) / w, (b[1][1] - b[0][1]) / h),
